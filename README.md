@@ -4,11 +4,18 @@ This demo shows how to start in Docker a Spring Boot Admin application and two S
 
 First, you need to install [Docker and Docker Compose](https://docs.docker.com/compose/#installation-and-set-up).
 
+## Install
+
+```bash
+git pull https://github.com/dilbertside/compose-spring-boot-admin.git
+cd compose-spring-boot-admin
+docker network create monitor
+```
+
 ## Run the demo
 To run the demo, you just need to start Docker Compose:
 
 ```bash
-docker network create monitor
 docker-compose up
 ```
 
@@ -28,5 +35,7 @@ docker-compose ps
 * upgrade [Spring Boot Admin](https://github.com/codecentric/spring-boot-admin) to 1.4.3
 * use [docker compose file definition version 2](https://docs.docker.com/compose/compose-file/#/version-2)
 * use [docker network](https://docs.docker.com/engine/userguide/networking/) instead of link
+
+The reason of using the network monitor is to ease the connection between containers not part of a composition and in different networks
 
 

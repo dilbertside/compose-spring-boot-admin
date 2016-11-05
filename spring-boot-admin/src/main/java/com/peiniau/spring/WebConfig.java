@@ -1,10 +1,14 @@
 package com.peiniau.spring;
 
 import javax.naming.ServiceUnavailableException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.context.request.async.DeferredResultProcessingInterceptorAdapter;
@@ -29,8 +33,29 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		configurer.setDefaultTimeout(env.getProperty("spring.async.default.timeout", Long.class, 3600000L) );
 		configurer.registerDeferredResultInterceptors(new DeferredResultProcessingInterceptorAdapter() {
 			@Override
-			public <T> boolean handleTimeout(NativeWebRequest request, DeferredResult<T> result) {
-				result.setErrorResult(new ServiceUnavailableException());
+			public <T> boolean handleTimeout(NativeWebRequest nativeWebRequest, DeferredResult<T> result) {
+				HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+				StringBuilder msg = new StringBuilder();
+				msg.append("uri=").append(request.getRequestURI());
+				String queryString = request.getQueryString();
+				if (queryString != null) {
+					msg.append('?').append(queryString);
+				}
+				String client = request.getRemoteAddr();
+				if (StringUtils.hasLength(client)) {
+					msg.append(";client=").append(client);
+				}
+				HttpSession session = request.getSession(false);
+				if (session != null) {
+					msg.append(";session=").append(session.getId());
+				}
+				String user = request.getRemoteUser();
+				if (user != null) {
+					msg.append(";user=").append(user);
+				}
+				msg.append(";headers=").append(new ServletServerHttpRequest(request).getHeaders());
+				
+				result.setErrorResult(new ServiceUnavailableException("request: " + msg.toString()));
 				return false;
 			}
 		});

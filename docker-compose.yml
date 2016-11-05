@@ -1,27 +1,44 @@
-admin:
-  build: spring-boot-docker-run
-  volumes:
-    - ./spring-boot-admin:/data
-    - ~/.m2:/root/.m2
-  ports:
-    - 8080:8080
-web1:
-  build: spring-boot-docker-run
-  volumes: 
-    - ./spring-boot-webapp-1:/data
-    - ~/.m2:/root/.m2
-  ports:
-    - 8081:8080
-  links:
-    - admin
-  command: mvn spring-boot:run -Dspring.boot.admin.client.url=http://localhost:8081
-web2:
-  build: spring-boot-docker-run
-  volumes: 
-    - ./spring-boot-webapp-2:/data
-    - ~/.m2:/root/.m2
-  ports:
-    - 8082:8080
-  links:
-    - admin
-  command: mvn spring-boot:run -Dspring.boot.admin.client.url=http://localhost:8082
+version: '2'
+#do not forget to run
+#docker network create monitor
+services:
+  admin:
+    build: spring-boot-docker-run
+    volumes:
+      - ./spring-boot-admin:/data
+      - ~/.m2:/root/.m2
+    ports:
+      - 8080:8080
+    networks:
+      - monitor
+  web1:
+    build: spring-boot-docker-run
+    volumes:
+      - ./spring-boot-webapp-1:/data
+      - ~/.m2:/root/.m2
+    ports:
+      - 8081:8080
+    networks:
+      - monitor
+    environment:
+      - SPRING_BOOT_ADMIN_CLIENT_ENABLED=true
+      - SPRING_BOOT_ADMIN_URL=http://admin.monitor:8080
+      - SPRING_BOOT_ADMIN_CLIENT_URL=http://http://web1.monitor:8081
+    #command: mvn spring-boot:run -Dspring.boot.admin.client.url=http://web1.monitor:8081
+  web2:
+    build: spring-boot-docker-run
+    volumes:
+      - ./spring-boot-webapp-2:/data
+      - ~/.m2:/root/.m2
+    environment:
+      - SPRING_BOOT_ADMIN_CLIENT_ENABLED=true
+      - SPRING_BOOT_ADMIN_URL=http://admin.monitor:8080
+      - SPRING_BOOT_ADMIN_CLIENT_URL=http://http://web2.monitor:8082
+    ports:
+      - 8082:8080
+    networks:
+      - monitor
+    #command: mvn spring-boot:run -Dspring.boot.admin.client.url=http://web2.monitor:8082
+networks:
+  monitor:
+    external: true

@@ -11,6 +11,8 @@ services:
       - 8080:8080
     networks:
       - monitor
+    environment:
+      - SPRING_ASYNC_DEFAULT_TIMEOUT=300000
   web1:
     build: spring-boot-docker-run
     volumes:

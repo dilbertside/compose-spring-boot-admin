@@ -1,11 +1,10 @@
 /**
- * NotifierConfiguration
+ * NotifierConfig
  */
 package com.peiniau.spring;
 
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -38,7 +37,7 @@ public class NotifierConfig {
 	@Primary
 	public RemindingNotifier remindingNotifier() {
 		RemindingNotifier remindingNotifier = new RemindingNotifier(filteringNotifier(loggerNotifier()));
-		remindingNotifier.setReminderPeriod(TimeUnit.MINUTES.toMillis(1));//The reminders will be sent every 5 minutes.
+		remindingNotifier.setReminderPeriod(TimeUnit.MINUTES.toMillis(1));//The reminders will be sent every minute.
 		remindingNotifier.setReminderStatuses(reminderStatuses);
 		return remindingNotifier;
 	}

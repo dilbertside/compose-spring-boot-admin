@@ -31,7 +31,7 @@ docker-compose ps
 
 ## fork changes
 
-* upgrade [Spring Boot](http://projects.spring.io/spring-boot/) to 1.4.1.RELEASE
+* upgrade [Spring Boot](http://projects.spring.io/spring-boot/) to 1.4.2.RELEASE
 * upgrade [Spring Boot Admin](https://github.com/codecentric/spring-boot-admin) to 1.4.3
 * use [docker compose file definition version 2](https://docs.docker.com/compose/compose-file/#/version-2)
 * use [docker network](https://docs.docker.com/engine/userguide/networking/) instead of link

@@ -16,7 +16,7 @@
     <version>1.0.0</version>
   <name>Spring Boot Tomcat Webapp 2</name>
   <description>Spring Boot Tomcat Webapp 2</description>
-  <properties><spring-security.version>4.2.0.RELEASE</spring-security.version></properties>
+  <properties><spring-security.version>4.2.1.RELEASE</spring-security.version></properties>
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
